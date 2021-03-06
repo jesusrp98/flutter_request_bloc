@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../cubits/request_cubit.dart';
-import '../cubits/request_state.dart';
+import '../cubits/index.dart';
 
 typedef RequestWidgetBuilder<T> = Widget Function(
   BuildContext context,

@@ -1,8 +1,7 @@
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../repositories/base.dart';
-import 'request_cubit.dart';
-import 'request_state.dart';
+import 'index.dart';
 
 /// Cubit that extends on [RequestCubit] by adding the ability to store its
 /// internal state using [HydratedBloc]. Serialization is handled automatically

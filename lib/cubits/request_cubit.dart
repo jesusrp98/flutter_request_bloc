@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../repositories/base.dart';
-import 'request_state.dart';
+import 'index.dart';
 
 /// Cubit that simplyfies state and repository management. It uses [RequestState]
 /// as the main state, with the specific type [T].
