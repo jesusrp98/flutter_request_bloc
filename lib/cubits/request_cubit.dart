@@ -22,8 +22,7 @@ abstract class RequestCubit<R extends BaseRepository, T>
   final bool autoLoad;
 
   RequestCubit(this.repository, {this.autoLoad = true})
-      : assert(repository != null),
-        super(RequestState.init()) {
+      : super(RequestState.init()) {
     if (autoLoad == true) loadData();
   }
 

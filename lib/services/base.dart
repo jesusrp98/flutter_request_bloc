@@ -8,5 +8,5 @@ abstract class BaseService<S> {
   /// Class that actually makes the connection to the data service
   final S client;
 
-  const BaseService(this.client) : assert(client != null);
+  const BaseService(this.client);
 }

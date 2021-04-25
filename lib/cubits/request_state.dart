@@ -14,13 +14,13 @@ class RequestState<T> extends Equatable {
 
   /// Storages the current value of the operation. Its type is defined by
   /// the class itself.
-  final T value;
+  final T? value;
 
   /// Variable which stores possible error messages during network operations
-  final String errorMessage;
+  final String? errorMessage;
 
   const RequestState._({
-    this.status,
+    required this.status,
     this.value,
     this.errorMessage,
   });
@@ -51,7 +51,7 @@ class RequestState<T> extends Equatable {
 
   /// Loading state, between initialization & data.
   /// It also receives the previous value if available.
-  const RequestState.loading([T previousValue])
+  const RequestState.loading([T? previousValue])
       : this._(
           value: previousValue,
           status: RequestStatus.loading,
@@ -74,7 +74,7 @@ class RequestState<T> extends Equatable {
         );
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         status.index,
         value.toString(),
         errorMessage,

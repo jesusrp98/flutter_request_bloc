@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../cubits/index.dart';
 
-typedef RequestWidgetBuilder<T> = Widget Function(
+typedef RequestWidgetBuilderInit<T> = Widget Function(
   BuildContext context,
   RequestState<T> state,
 );
@@ -11,35 +11,23 @@ typedef RequestWidgetBuilder<T> = Widget Function(
 typedef RequestWidgetBuilderLoaded<T> = Widget Function(
   BuildContext context,
   RequestState<T> state,
-  T value,
-);
-
-typedef RequestListBuilderLoaded<T> = List<Widget> Function(
-  BuildContext context,
-  RequestState<T> state,
-  T value,
+  T? value,
 );
 
 typedef RequestWidgetBuilderError<T> = Widget Function(
   BuildContext context,
   RequestState<T> state,
-  String errorMessage,
-);
-
-typedef RequestListBuilderError<T> = List<Widget> Function(
-  BuildContext context,
-  RequestState<T> state,
-  String errorMessage,
+  String? errorMessage,
 );
 
 class RequestBuilder<C extends RequestCubit, T> extends StatelessWidget {
-  final RequestWidgetBuilder<T> onInit;
-  final RequestWidgetBuilderLoaded<T> onLoading;
-  final RequestWidgetBuilderLoaded<T> onLoaded;
-  final RequestWidgetBuilderError<T> onError;
+  final RequestWidgetBuilderInit<T>? onInit;
+  final RequestWidgetBuilderLoaded<T>? onLoading;
+  final RequestWidgetBuilderLoaded<T>? onLoaded;
+  final RequestWidgetBuilderError<T>? onError;
 
   const RequestBuilder({
-    Key key,
+    Key? key,
     this.onInit,
     this.onLoading,
     this.onLoaded,
@@ -53,22 +41,30 @@ class RequestBuilder<C extends RequestCubit, T> extends StatelessWidget {
       builder: (context, state) {
         switch (state.status) {
           case RequestStatus.init:
-            if (onInit != null) return onInit(context, state);
+            if (onInit != null) {
+              return onInit!(context, state as RequestState<T>);
+            }
             break;
 
           case RequestStatus.loading:
             if (onLoading != null) {
-              return onLoading(context, state, state.value);
+              return onLoading!(context, state as RequestState<T>, state.value);
             }
             break;
 
           case RequestStatus.loaded:
-            if (onLoaded != null) return onLoaded(context, state, state.value);
+            if (onLoaded != null) {
+              return onLoaded!(context, state as RequestState<T>, state.value);
+            }
             break;
 
           case RequestStatus.error:
             if (onError != null) {
-              return onError(context, state, state.errorMessage);
+              return onError!(
+                context,
+                state as RequestState<T>,
+                state.errorMessage,
+              );
             }
             break;
         }

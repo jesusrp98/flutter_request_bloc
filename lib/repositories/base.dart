@@ -10,7 +10,7 @@ abstract class BaseRepository<S extends BaseService, T> {
   /// Agent that handles retrieve of pure raw information from the API or Firebase...
   final S service;
 
-  const BaseRepository(this.service) : assert(service != null);
+  const BaseRepository(this.service);
 
   /// Calls the [service] internal
   Future<T> fetchData();
