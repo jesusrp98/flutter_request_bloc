@@ -1,6 +1,6 @@
 name: flutter_request_bloc
-description: A new Flutter package project.
-version: 0.0.1
+description: Package that facilitates REST API calls using flutter_bloc and hydrated_bloc.
+version: 0.1.0
 homepage: https://github.com/jesusrp98/flutter_packages/
 
 environment:
@@ -17,5 +17,3 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-flutter:
