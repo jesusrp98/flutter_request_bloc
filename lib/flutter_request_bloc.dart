@@ -5,3 +5,4 @@ export 'cubits/request_persistant_cubit.dart';
 export 'cubits/request_state.dart';
 export 'repositories/base.dart';
 export 'services/base.dart';
+export 'widgets/request_builder.dart';
