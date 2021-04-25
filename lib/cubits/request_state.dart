@@ -1,10 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 
 /// Variable that represents the current state of the response operation.
 enum RequestStatus { init, loading, loaded, error }
-
-@immutable
 
 /// Class that handles state, value and possible errors generated during a
 /// network data transmission.
