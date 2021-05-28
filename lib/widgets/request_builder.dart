@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../cubits/index.dart';
+import '../flutter_request_bloc.dart';
 
 typedef RequestWidgetBuilderInit<T> = Widget Function(
   BuildContext context,
@@ -20,10 +20,20 @@ typedef RequestWidgetBuilderError<T> = Widget Function(
   String? errorMessage,
 );
 
+/// This widget makes contruction UI using [Request] object pretty easily.
+/// It has a [RequestWidgetBuilder] parameter for each [RequestState] value,
+/// so that the interface can adapt to the current status of the request.
 class RequestBuilder<C extends RequestCubit, T> extends StatelessWidget {
+  /// Builder method called when the [RequestState] is 'init'.
   final RequestWidgetBuilderInit<T>? onInit;
+
+  /// Builder method called when the [RequestState] is 'loading'.
   final RequestWidgetBuilderLoaded<T>? onLoading;
+
+  /// Builder method called when the [RequestState] is 'loaded'.
   final RequestWidgetBuilderLoaded<T>? onLoaded;
+
+  /// Builder method called when the [RequestState] is 'error'.
   final RequestWidgetBuilderError<T>? onError;
 
   const RequestBuilder({

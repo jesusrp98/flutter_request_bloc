@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../repositories/base.dart';
-import 'index.dart';
+import '../flutter_request_bloc.dart';
 
 /// Cubit that simplyfies state and repository management. It uses [RequestState]
 /// as the main state, with the specific type [T].
@@ -18,7 +17,13 @@ import 'index.dart';
 /// - T: model which represents the type of the state.
 abstract class RequestCubit<R extends BaseRepository, T>
     extends Cubit<RequestState<T>> {
+  /// [BaseRepository] used to storage and manage all the data coming from the
+  /// specific [BaseService]`.
   final R repository;
+
+  /// Call the [loadData] method upon object initialization.
+  ///
+  /// Default is set to [true].
   final bool autoLoad;
 
   RequestCubit(this.repository, {this.autoLoad = true})
