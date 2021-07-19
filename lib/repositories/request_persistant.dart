@@ -2,16 +2,16 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../flutter_request_bloc.dart';
 
-/// Cubit that extends on [RequestCubit] by adding the ability to store its
+/// Repository that extends on [RequestRepository] by adding the ability to store its
 /// internal state using [HydratedBloc]. Serialization is handled automatically
 /// by the state and the cubit state.
 ///
 /// Parameters:
-/// - R: repository that extends [BaseRepository].
+/// - S: service that extends [BaseService].
 /// - T: model which represents the type of the state.
-abstract class RequestPersistantCubit<R extends BaseRepository, T>
-    extends RequestCubit<R, T> with HydratedMixin {
-  RequestPersistantCubit(R repository) : super(repository) {
+abstract class RequestPersistantRepository<S extends BaseService, T>
+    extends RequestRepository<S, T> with HydratedMixin {
+  RequestPersistantRepository(S service) : super(service, autoLoad: false) {
     hydrate();
   }
 

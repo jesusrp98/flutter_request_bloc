@@ -2,9 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../flutter_request_bloc.dart';
 
-/// Cubit that simplyfies state and repository management. It uses [RequestState]
+/// Cubit that simplyfies state and data management. It uses [RequestState]
 /// as the main state, with the specific type [T].
-/// The repository [R] is also used to download the data.
 /// Events are emited from the [loadData] method, to signify the change of state
 /// within the network request process.
 ///
@@ -13,25 +12,34 @@ import '../flutter_request_bloc.dart';
 /// This parameter is set to `true` by default.
 ///
 /// Parameters:
-/// - R: repository that extends [BaseRepository].
+/// - S: service that extends [BaseService].
 /// - T: model which represents the type of the state.
-abstract class RequestCubit<R extends BaseRepository, T>
+abstract class RequestRepository<S extends BaseService, T>
     extends Cubit<RequestState<T>> {
-  /// [BaseRepository] used to storage and manage all the data coming from the
-  /// specific [BaseService]`.
-  final R repository;
+  /// Agent that handles retrieve of pure raw information from the API or Firebase...
+  final S service;
 
   /// Call the [loadData] method upon object initialization.
   ///
   /// Default is set to [true].
   final bool autoLoad;
 
-  RequestCubit(this.repository, {this.autoLoad = true})
+  RequestRepository(this.service, {this.autoLoad = true})
       : super(RequestState.init()) {
     if (autoLoad == true) loadData();
   }
 
-  /// Overridable method that handles data load & applying models within
-  /// the repository
-  Future<void> loadData();
+  /// Overridable method that handles data load from the service.
+  Future<void> loadData() async {
+    emit(RequestState.loading(state.value));
+
+    try {
+      emit(RequestState.loaded(await fetchData()));
+    } catch (e) {
+      emit(RequestState.error(e.toString()));
+    }
+  }
+
+  /// Overridable method that handles data fetching and mapping.
+  Future<T> fetchData();
 }
