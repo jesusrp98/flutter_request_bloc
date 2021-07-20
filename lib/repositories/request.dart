@@ -42,4 +42,7 @@ abstract class RequestRepository<S extends BaseService, T>
 
   /// Overridable method that handles data fetching and mapping.
   Future<T> fetchData();
+
+  /// Simple data getter from the state's value.
+  T? get data => state.value;
 }
