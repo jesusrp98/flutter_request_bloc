@@ -22,62 +22,48 @@ The status of a request made by a `Request` object inside this library can be re
 - **RequestState.loaded**
 - **RequestState.error**
 
-### RequestCubit
+### RequestRepository
 
-The `RequestCubit` object is the base of this package, and allows you to easily create a `cubit` object that handles all data related to any data request.
+The `RequestRepository` object is the base of this package, and allows you to easily create a `repository` object that handles all data related to any data request.
 
-It makes use of both a `BaseRepository` and a `BaseService` object. This way, the 'request' class logic is completly separated from the downloading and managing aspect of the information it controlls.
+It makes use of a `BaseService` object. This way, the 'request' class logic is completly separated from the downloading and managing aspect of the information it controlls.
 
-The `loadData` is the method inside the 'request' object that handles all the event-emiting logic related to a `cubit` object. Inside it, you can call the `fetchData` method inside the `BaseRepository` obejct you're using at that time.
+The `loadData` is the method inside the 'request' object that handles all the event-emiting logic related to a `repository` object. Inside it, you can call the `fetchData` method you're using at that time.
 
 You can use the `autoLoad` constructor parameter to automatically call the `loadData` method upon its initialization.
 
 ```
-class TodosCubit extends RequestCubit<TodosRepository, String> {
-  TodosCubit(TodosRepository repository)
+class TodosRepository extends RequestRepository<TodosService, String> {
+  TodosRepository(TodosService service)
       : super(
-          repository,
+          service,
           autoLoad: false,
         );
 
   @override
-  Future<void> loadData() async {
-    emit(RequestState.loading(state.value));
+  Future<String> fetchData() async => (await service.getTodos()).toString();
 
-    try {
-      final data = await repository.fetchData();
-
-      emit(RequestState.loaded(data));
-    } catch (e) {
-      emit(RequestState.error(e.toString()));
-    }
+  void loadError() {
+    emit(RequestState.error('ERROR GENERATED!'));
   }
-}
 ```
 
-### RequestPersistantCubit
+### RequestPersistantRepository
 
 This object is pretty similiar to the one above, with the difference that it has te ability to make its data 'persistant', using the `hydrated_bloc` library.
 
-It also has the same front-end API as `RequestCubit`.
+It also has the same front-end API as `RequestRepository`.
 
 ```
-class TodosCubit extends RequestPersistantCubit<TodosRepository, String> {
-  TodosCubit(TodosRepository repository) : super(repository);
+class TodosRepository extends RequestPersistantRepository<TodosService, String> {
+  TodosRepository(TodosService service) : super(service);
 
   @override
-  Future<void> loadData() async {
-    emit(RequestState.loading(state.value));
+  Future<String> fetchData() async => (await service.getTodos()).toString();
 
-    try {
-      final data = await repository.fetchData();
-
-      emit(RequestState.loaded(data));
-    } catch (e) {
-      emit(RequestState.error(e.toString()));
-    }
+  void loadError() {
+    emit(RequestState.error('ERROR GENERATED!'));
   }
-}
 ```
 
 ### RequestBuilder
