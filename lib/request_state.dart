@@ -1,6 +1,10 @@
 import 'package:equatable/equatable.dart';
 
+/// Function that deserialize the data in JSON form to an actual instance of
+/// the object.
 typedef ValueConstructor<T> = T Function(Map<String, dynamic>);
+
+/// Function that serialize the data to a JSON form.
 typedef ValueDeconstructor<T> = Map<String, dynamic>? Function(T?);
 
 /// Variable that represents the current state of the response operation.
@@ -44,7 +48,7 @@ class RequestState<T> extends Equatable {
   Map<String, dynamic> toJson({required ValueDeconstructor<T> valueBuilder}) {
     return {
       'status': status.index,
-      'value':  valueBuilder(value),
+      'value': valueBuilder(value),
       'errorMessage': errorMessage,
     };
   }
