@@ -32,82 +32,97 @@ void main() {
   group('Testing serialization', () {
     test('RequestState.fromJson()', () {
       expect(
-        RequestState.fromJson({
-          'status': RequestStatus.init.index,
-          'value': null,
-          'errorMessage': null,
-        }),
-        RequestState.init(),
+        RequestState<dynamic>.fromJson(
+          {
+            'status': RequestStatus.init.index,
+            'value': null,
+            'errorMessage': null,
+          },
+          valueBuilder: (_) => null,
+        ),
+        RequestState<dynamic>.init(),
       );
 
       expect(
-        RequestState.fromJson({
-          'status': RequestStatus.loading.index,
-          'value': null,
-          'errorMessage': null,
-        }),
-        RequestState.loading(),
+        RequestState<dynamic>.fromJson(
+          {
+            'status': RequestStatus.loading.index,
+            'value': null,
+            'errorMessage': null,
+          },
+          valueBuilder: (_) => null,
+        ),
+        RequestState<dynamic>.loading(),
       );
 
       expect(
-        RequestState<String>.fromJson({
-          'status': RequestStatus.loading.index,
-          'value': 'previous',
-          'errorMessage': null,
-        }),
+        RequestState<String>.fromJson(
+          {
+            'status': RequestStatus.loading.index,
+            'value': {'data': 'previous'},
+            'errorMessage': null,
+          },
+          valueBuilder: (value) => value['data'],
+        ),
         RequestState.loading('previous'),
       );
 
       expect(
-        RequestState<String>.fromJson({
-          'status': RequestStatus.loaded.index,
-          'value': 'Lorem',
-          'errorMessage': null,
-        }),
+        RequestState<String>.fromJson(
+          {
+            'status': RequestStatus.loaded.index,
+            'value': {'data': 'Lorem'},
+            'errorMessage': null,
+          },
+          valueBuilder: (value) => value['data'],
+        ),
         RequestState.loaded('Lorem'),
       );
 
       expect(
-        RequestState.fromJson({
-          'status': RequestStatus.error.index,
-          'value': null,
-          'errorMessage': 'Lorem',
-        }),
-        RequestState.error('Lorem'),
+        RequestState<dynamic>.fromJson(
+          {
+            'status': RequestStatus.error.index,
+            'value': null,
+            'errorMessage': 'Lorem',
+          },
+          valueBuilder: (_) => null,
+        ),
+        RequestState<dynamic>.error('Lorem'),
       );
     });
 
     test('RequestState.toJson()', () {
       var state = RequestState.init();
-      expect(state.toJson(), {
+      expect(state.toJson(valueBuilder: (value) => null), {
         'status': RequestStatus.init.index,
         'value': null,
         'errorMessage': null,
       });
 
       state = RequestState.loading();
-      expect(state.toJson(), {
+      expect(state.toJson(valueBuilder: (value) => null), {
         'status': RequestStatus.loading.index,
         'value': null,
         'errorMessage': null,
       });
 
       state = RequestState.loading('previous');
-      expect(state.toJson(), {
+      expect(state.toJson(valueBuilder: (value) => {'data': value}), {
         'status': RequestStatus.loading.index,
-        'value': 'previous',
+        'value': {'data': 'previous'},
         'errorMessage': null,
       });
 
       state = RequestState.loaded('Lorem');
-      expect(state.toJson(), {
+      expect(state.toJson(valueBuilder: (value) => {'data': value}), {
         'status': RequestStatus.loaded.index,
-        'value': 'Lorem',
+        'value': {'data': 'Lorem'},
         'errorMessage': null,
       });
 
       state = RequestState.error('Lorem');
-      expect(state.toJson(), {
+      expect(state.toJson(valueBuilder: (value) => null), {
         'status': RequestStatus.error.index,
         'value': null,
         'errorMessage': 'Lorem',
