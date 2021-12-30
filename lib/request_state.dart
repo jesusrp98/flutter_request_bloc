@@ -1,5 +1,8 @@
 import 'package:equatable/equatable.dart';
 
+typedef ValueConstructor<T> = T Function(Map<String, dynamic>);
+typedef ValueDeconstructor<T> = Map<String, dynamic>? Function(T?);
+
 /// Variable that represents the current state of the response operation.
 enum RequestStatus { init, loading, loaded, error }
 
@@ -26,19 +29,22 @@ class RequestState<T> extends Equatable {
   });
 
   /// Handles creation of network request state from a JSON ([Map])
-  factory RequestState.fromJson(Map<String, dynamic> json) {
+  factory RequestState.fromJson(
+    Map<String, dynamic> json, {
+    required ValueConstructor<T> valueBuilder,
+  }) {
     return RequestState._(
       status: RequestStatus.values[json['status']],
-      value: json['value'],
+      value: json['value'] != null ? valueBuilder(json['value']) : null,
       errorMessage: json['errorMessage'],
     );
   }
 
   /// Handles creation of JSON ([Map]) objects from a network request state
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({required ValueDeconstructor<T> valueBuilder}) {
     return {
       'status': status.index,
-      'value': value,
+      'value':  valueBuilder(value),
       'errorMessage': errorMessage,
     };
   }

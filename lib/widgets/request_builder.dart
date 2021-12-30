@@ -23,7 +23,7 @@ typedef RequestWidgetBuilderError<T> = Widget Function(
 /// This widget makes contruction UI using [Request] object pretty easily.
 /// It has a [RequestWidgetBuilder] parameter for each [RequestState] value,
 /// so that the interface can adapt to the current status of the request.
-class RequestBuilder<C extends RequestCubit, T> extends StatelessWidget {
+class RequestBuilder<R extends RequestRepository, T> extends StatelessWidget {
   /// Builder method called when the [RequestState] is 'init'.
   final RequestWidgetBuilderInit<T>? onInit;
 
@@ -46,7 +46,7 @@ class RequestBuilder<C extends RequestCubit, T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<C, RequestState>(
+    return BlocConsumer<R, RequestState>(
       listener: (context, state) => null,
       builder: (context, state) {
         switch (state.status) {

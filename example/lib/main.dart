@@ -1,15 +1,24 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:flutter_request_bloc/flutter_request_bloc.dart';
 import 'package:flutter_request_bloc/widgets/request_builder.dart';
+import 'package:path_provider/path_provider.dart';
 
-import 'cubit.dart';
+import 'model.dart';
 import 'repository.dart';
 import 'service.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final storage = await HydratedStorage.build(
+    storageDirectory: await getTemporaryDirectory(),
+  );
+  HydratedBlocOverrides.runZoned(
+    () => runApp(MyApp()),
+    storage: storage,
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -18,10 +27,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => TodosCubit(
-            TodosRepository(
-              TodosService(Dio()),
-            ),
+          create: (_) => TodosRepository(
+            TodosService(Dio()),
           ),
         ),
       ],
@@ -39,10 +46,10 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('Flutter Request Bloc')),
       body: Center(
-        child: RequestBuilder<TodosCubit, String>(
+        child: RequestBuilder<TodosRepository, Todo>(
           onInit: (context, state) => Text('Hello world!'),
           onLoading: (context, state, value) => CircularProgressIndicator(),
-          onLoaded: (context, state, value) => Text(value!),
+          onLoaded: (context, state, value) => Text(value!.title),
           onError: (context, state, error) => Text(error!),
         ),
       ),
@@ -51,12 +58,12 @@ class MyHomePage extends StatelessWidget {
         children: [
           FloatingActionButton(
             child: Text('Load'),
-            onPressed: () => context.read<TodosCubit>().loadData(),
+            onPressed: () => context.read<TodosRepository>().loadData(),
           ),
           SizedBox(height: 8),
           FloatingActionButton(
             child: Text('Error'),
-            onPressed: () => context.read<TodosCubit>().loadError(),
+            onPressed: () => context.read<TodosRepository>().loadError(),
           ),
         ],
       ),
